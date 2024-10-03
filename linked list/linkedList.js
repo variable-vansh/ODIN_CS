@@ -39,7 +39,7 @@ class LinkedList {
             currentNode = currentNode.next;
             counter++;
         }
-        console.log("SIZE= " + counter)
+        return counter;
     }
     // prepend(value) adds a new node containing value to the start of the list
     prepend(value) {
@@ -79,14 +79,104 @@ class LinkedList {
             console.log("invalid index entered")
         }
     }
+
     // pop removes the last element from the list
+    pop() {
+        let currentNode = this.head;
+        while (currentNode != undefined) {
+            if (currentNode.next.next == undefined) {
+                currentNode.next = undefined;
+            }
+            currentNode = currentNode.next;
+        }
+
+    }
     // contains(value) returns true if the passed in value is in the list and otherwise returns false.
+    contains(value) {
+        let result = false;
+        let currentNode = this.head;
+        while (currentNode != undefined) {
+            if (currentNode.value == value) {
+                result = true;
+            }
+            currentNode = currentNode.next;
+        }
+        return result;
+    }
     //     find(value) returns the index of the node containing value, or null if not found.
+    find(value) {
+        let currentNode = this.head;
+        let index = 0;
+        while (currentNode != undefined) {
+            if (currentNode.value == value) {
+                return (`present at index ${index}`)
+            }
+            index++;
+            currentNode = currentNode.next;
+        }
+        return ("not found")
+    }
     // toString represents your LinkedList objects as strings, so you can print them out and preview them in the console.The format should be: (value) -> (value) -> (value) -> null
+    toStrings() {
+        let resultString = "";
+        let currentNode = this.head;
+        while (currentNode != undefined) {
+            resultString = resultString + `(${currentNode.value}) -> `
+            currentNode = currentNode.next
+        }
+        resultString += `${null}`
+        return resultString
+    }
     // Extra credit
     // insertAt(value, index) that inserts a new node with the provided value at the given index.
+    insertAt(value, index) {
+        let done = false
+        let currentNode = this.head;
+        let indexCounter = 0;
+        let newNodeCreated = new Node(value);
+        if (index == 0) {
+            let temp = currentNode
+            this.head = newNodeCreated;
+            this.head.next = temp
+            done = true
+        }
+        else {
+            while (currentNode != undefined) {
+                if (indexCounter == index - 1) {
+                    done = true
+                    let temp = currentNode.next;
+                    currentNode.next = newNodeCreated;
+                    currentNode.next.next = temp;
+                }
+                indexCounter++;
+                currentNode = currentNode.next;
+            }
+        }
+        if (!done) {
+            console.log("invalid index for insert function")
+        }
+    }
     //     removeAt(index) that removes the node at the given index.
-
+    removeAt(index) {
+        let currentNode = this.head;
+        let indexCounter = 0;
+        if (index > this.size() - 1) {
+            console.log("invlid index entered")
+        } else if (index == 0) {
+            this.head = currentNode.next;
+        } else {
+            while (currentNode != undefined) {
+                if (indexCounter + 1 == index) {
+                    currentNode.next = currentNode.next.next;
+                }
+                currentNode = currentNode.next;
+                indexCounter++;
+            }
+        }
+    }
 }
+
+
+
 
 export { LinkedList }
