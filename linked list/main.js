@@ -39,6 +39,8 @@ while (currentNode != undefined) {
     currentNode = currentNode.next;
 }
 
+// list.test();
+
 // console.log("test")
 
 

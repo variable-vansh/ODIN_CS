@@ -174,6 +174,10 @@ class LinkedList {
             }
         }
     }
+
+    test() {
+        console.log("calling from class in another module")
+    }
 }
 
 
