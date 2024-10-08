@@ -8,7 +8,11 @@ class Node {
 
 class Tree {
     constructor(array) {
-        this.root = this.buildTree(sortArray(array));
+        if (array.length === 0) {
+            this.root = null;
+        } else {
+            this.root = this.buildTree(sortArray(array));
+        }
         this.inOrderArr = [];
     }
 
@@ -34,6 +38,10 @@ class Tree {
         // check if selected side is null
         // if null, put in value
         // if not null, take up that node recursively 
+        if (this.root === null) {
+            this.root = new Node(value);
+            return;
+        }
 
         //take up a node
         let currentNode = this.root;
@@ -217,7 +225,73 @@ class Tree {
         return calculateHeight(currentNode);
     }
 
+    //number of edges in the path from a given node to the tree’s root node
+    depth(targetValue) {
+        // let targetNode = this.find(currentValue);
 
+        return calculateDepth(this.root, targetValue)
+
+        function calculateDepth(currentNode, targetValue) {
+            if (currentNode == null) {
+                return 10;
+            }
+            else if (currentNode.data === targetValue) {
+                return 0;
+            }
+            //if it is a leaf node, height=1
+            else if (currentNode.leftBranch === null && currentNode.rightBranch === null) {
+                return 10;
+            } else {
+                let leftDepth = calculateDepth(currentNode.leftBranch, targetValue);
+                let rightDepth = calculateDepth(currentNode.rightBranch, targetValue);
+                return Math.min(leftDepth, rightDepth) + 1;
+            }
+        }
+    }
+
+    // balanced tree is one where the difference between heights of the left subtree and the right subtree of every node is not more than 1.
+    // for each Node, find height of left and right branch
+    // return false if difference is not equal to 1
+    //otherwise return true
+    isBalanced() {
+        //recursive function to check for each node
+        function checkBalance(node) {
+            //base condition
+            //if node is null, return
+            if (node === null) {
+                return { balanced: true, height: -1 };
+            }
+
+            //recursive call, for left and right branches
+            let left = checkBalance(node.leftBranch);
+            let right = checkBalance(node.rightBranch);
+
+            //if either of the branches is not balanced, return false
+            if (!left.balanced || !right.balanced) {
+                return { balanced: false, height: 0 };
+            }
+
+            //compare left and right heights
+            let heightDiff = Math.abs(left.height - right.height);
+            //boolean balanced
+            let balanced = heightDiff <= 1;
+            //height of this node calculated (important for recursive purpose)
+            let height = Math.max(left.height, right.height) + 1;
+
+            return { balanced, height };
+        }
+
+        return checkBalance(this.root).balanced;
+    }
+
+    //take in unbalanced tree
+    //travers through each node
+    //collect all values
+    //create a new tree from all those values
+    rebalance() {
+        let extractedValues = (sortArray(this.levelOrder()))
+        return new Tree(extractedValues)
+    }
 
 
 }
@@ -279,7 +353,7 @@ const prettyPrint = (node, prefix = "", isLeft = true) => {
 };
 
 // let test = new Tree([1, 7, 4, 23, 8, 4, 3, 5, 7, 9, 67, 6345, 324])
-let test = new Tree([1, 2, 3, 4, 5, 6, 7, 8, 9])
+// let test = new Tree([1, 2, 3, 4, 5, 6, 7, 8, 9])
 // let test = new Tree([1, 2, 2, 3, 3, 4, 5])
 
 // test.insert(5.5)
@@ -292,11 +366,26 @@ let test = new Tree([1, 2, 3, 4, 5, 6, 7, 8, 9])
 // test.preOrder(test.root, (node) => console.log(node.data));
 // console.log("POSTORDER")
 // test.postOrder(test.root, (node) => console.log(node.data));
-
+// console.log(test.height(7))
+// console.log(test.depth(1))
 // console.log(test.levelOrder(test.root))
 
-console.log(test.height(7))
-console.log(prettyPrint(test.root))
+// console.log(test.isBalanced())
+
+//------------------wworking with unbalanced tree and rebalancing it------------------
+let unbalancedTree = new Tree([]);
+[10, 30, 20, 40, 50].forEach(val => unbalancedTree.insert(val));
+console.log(unbalancedTree.isBalanced()); // This should return false
+
+unbalancedTree.rebalance()
+prettyPrint(unbalancedTree.root)
+
+console.log(unbalancedTree.rebalance().isBalanced());
+prettyPrint(unbalancedTree.rebalance().root)
+
+//------------------------------------------------------------------------------------
+
+// prettyPrint(test.root)
 // console.log(sortArray([1, 7, 4, 23, 8, 4, 3, 5, 7, 9, 67, 6345, 324]))
 
 // console.log(sortArray([1, 7, 4, 23, 8, 4, 3, 5, 7, 9, 67, 6345, 324]))
