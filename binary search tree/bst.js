@@ -8,12 +8,13 @@ class Node {
 
 class Tree {
     constructor(array) {
-        this.root = this.buildTree(array);
+        this.root = this.buildTree(sortArray(array));
+        this.inOrderArr = [];
     }
 
     // takes an array of data and turns it into a balanced binary tree full of Node objects appropriately placed
-    buildTree(arr, left = 0, right = arr.length) {
-        let sArr = sortArray(arr)
+    buildTree(sArr, left = 0, right = sArr.length - 1) {
+        // let sArr = sortArray(arr)
         if (left > right) {
             return null;
         }
@@ -135,15 +136,96 @@ class Tree {
         }
     }
 
+    //level order traversal
+    levelOrder(callback = this.root) {
+        //take a node
+        //put it in the queue
+        //take it out
+        //extract it's data and put it's left and right children nodes in the queue
+        //do this untill the node is null
+
+        let resultArr = [];
+        //initialize queue array
+        let queue = [];
+        //push the first node into queue
+        queue.push(callback);
+
+        //keep looping untill the queue is empty
+        while (queue.length > 0) {
+            //store the front most element in result
+            resultArr.push(queue[0].data)
+
+            //select the frontmost element from queue
+            let currentNode = queue[0];
+            //remove the frontmost element
+            queue.splice(0, 1);
+
+            //if leftBranch exists, add it to the the queue
+            if (currentNode.leftBranch != null) {
+                queue.push(currentNode.leftBranch)
+            }
+            //similarly, add the right branch if it exists
+            if (currentNode.rightBranch != null) {
+                queue.push(currentNode.rightBranch)
+            }
+
+        }
+
+        return resultArr;
+    }
+
+
+    inOrder(node = this.root, callback) {
+        //if the current node is null, exit function
+        if (node === null) {
+            return;
+        }
+
+        //runtime arrives here only when the node is non null
+        //the left node is treated separately
+        this.inOrder(node.leftBranch, callback);
+        //after dealing with the left node completely, the node is called upon
+        callback(node); // or callback(node.data) if you only need the data
+        //then the right node is dealt with
+        this.inOrder(node.rightBranch, callback);
+    }
+
+    //visit node,left,right
+    preOrder(node = this.root, callback) {
+        if (node === null) {
+            return;
+        }
+
+        callback(node)
+        this.inOrder(node.leftBranch, callback);
+        this.inOrder(node.rightBranch, callback);
+    }
+
+    //visit left,right,node
+    postOrder(node = this.root, callback) {
+        if (node === null) {
+            return;
+        }
+
+        this.inOrder(node.leftBranch, callback);
+        this.inOrder(node.rightBranch, callback);
+        callback(node)
+    }
+
+
+
 }
 //sort array and remove duplicates
 function sortArray(arr) {
+
+
     //remove duplicates
     for (let i = 0; i < arr.length; i++) {
         let pick = arr[i];
         for (let j = i + 1; j < arr.length; j++) {
             if (arr[j] == pick) {
                 arr.splice(j, 1)
+
             }
         }
     }
@@ -158,7 +240,7 @@ function sortArray(arr) {
             }
         }
     }
-    return arr;
+    return arr
 }
 
 const prettyPrint = (node, prefix = "", isLeft = true) => {
@@ -175,12 +257,23 @@ const prettyPrint = (node, prefix = "", isLeft = true) => {
 };
 
 // let test = new Tree([1, 7, 4, 23, 8, 4, 3, 5, 7, 9, 67, 6345, 324])
-let test = new Tree([1, 2, 3, 4, 5, 6, 7, 8, 9])
+// let test = new Tree([1, 2, 3, 4, 5, 6, 7, 8, 9])
+let test = new Tree([1, 2, 2, 3, 3, 4, 5])
+
 // test.insert(5.5)
 // test.delete(6)
 // test.find(8)
+// console.log(sortArray([1, 2, 2, 3, 3, 4, 5]))
+// console.log("INORDER")
+// test.inOrder(test.root, (node) => console.log(node.data));
+// console.log("PREORDER")
+// test.preOrder(test.root, (node) => console.log(node.data));
+// console.log("POSTORDER")
+// test.postOrder(test.root, (node) => console.log(node.data));
+
+// console.log(test.levelOrder(test.root))
 
 console.log(prettyPrint(test.root))
-
+// console.log(sortArray([1, 7, 4, 23, 8, 4, 3, 5, 7, 9, 67, 6345, 324]))
 
 // console.log(sortArray([1, 7, 4, 23, 8, 4, 3, 5, 7, 9, 67, 6345, 324]))
