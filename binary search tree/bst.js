@@ -330,7 +330,7 @@ function sortArray(arr) {
     for (let i = 0; i < arr.length; i++) {
         for (let j = 0; j <= arr.length - i - 1; j++) {
             if (arr[j + 1] < arr[j]) {
-                temp = arr[j];
+                let temp = arr[j];
                 arr[j] = arr[j + 1];
                 arr[j + 1] = temp;
             }
@@ -351,6 +351,10 @@ const prettyPrint = (node, prefix = "", isLeft = true) => {
         prettyPrint(node.leftBranch, `${prefix}${isLeft ? "    " : "│   "}`, true);
     }
 };
+
+export { Tree, Node, calculateHeight, sortArray, prettyPrint }
+
+//----------------------------------------------------------------------------------------------------------
 
 // let test = new Tree([1, 7, 4, 23, 8, 4, 3, 5, 7, 9, 67, 6345, 324])
 // let test = new Tree([1, 2, 3, 4, 5, 6, 7, 8, 9])
@@ -373,15 +377,15 @@ const prettyPrint = (node, prefix = "", isLeft = true) => {
 // console.log(test.isBalanced())
 
 //------------------wworking with unbalanced tree and rebalancing it------------------
-let unbalancedTree = new Tree([]);
-[10, 30, 20, 40, 50].forEach(val => unbalancedTree.insert(val));
-console.log(unbalancedTree.isBalanced()); // This should return false
+// let unbalancedTree = new Tree([]);
+// [10, 30, 20, 40, 50].forEach(val => unbalancedTree.insert(val));
+// console.log(unbalancedTree.isBalanced()); // This should return false
 
-unbalancedTree.rebalance()
-prettyPrint(unbalancedTree.root)
+// unbalancedTree.rebalance()
+// prettyPrint(unbalancedTree.root)
 
-console.log(unbalancedTree.rebalance().isBalanced());
-prettyPrint(unbalancedTree.rebalance().root)
+// console.log(unbalancedTree.rebalance().isBalanced());
+// prettyPrint(unbalancedTree.rebalance().root)
 
 //------------------------------------------------------------------------------------
 
