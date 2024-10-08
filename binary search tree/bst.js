@@ -125,9 +125,7 @@ class Tree {
             } else if (value > currentValue) {
                 currentNode = currentNode.rightBranch;
             } else if (value == currentValue) {
-                console.log("mil gaya")
-                console.log(currentNode)
-                return
+                return currentNode;
             }
             else {
                 console.log("not found")
@@ -212,9 +210,33 @@ class Tree {
         callback(node)
     }
 
+    //number of edges in the longest path from a given node to a leaf node
+    height(currentValue) {
+        //get the node corresponding to value
+        let currentNode = this.find(currentValue);
+        return calculateHeight(currentNode);
+    }
+
+
 
 
 }
+//take in node
+function calculateHeight(node) {
+    //if node is empty, height=0
+    if (node === null) {
+        return -1;
+    }
+    //if it is a leaf node, height=1
+    else if (node.leftBranch === null && node.rightBranch === null) {
+        return 0;
+    } else {
+        let leftHeight = calculateHeight(node.leftBranch);
+        let rightHeight = calculateHeight(node.rightBranch);
+        return Math.max(leftHeight, rightHeight) + 1;
+    }
+}
+
 //sort array and remove duplicates
 function sortArray(arr) {
 
@@ -257,12 +279,12 @@ const prettyPrint = (node, prefix = "", isLeft = true) => {
 };
 
 // let test = new Tree([1, 7, 4, 23, 8, 4, 3, 5, 7, 9, 67, 6345, 324])
-// let test = new Tree([1, 2, 3, 4, 5, 6, 7, 8, 9])
-let test = new Tree([1, 2, 2, 3, 3, 4, 5])
+let test = new Tree([1, 2, 3, 4, 5, 6, 7, 8, 9])
+// let test = new Tree([1, 2, 2, 3, 3, 4, 5])
 
 // test.insert(5.5)
 // test.delete(6)
-// test.find(8)
+// console.log(test.find(8))
 // console.log(sortArray([1, 2, 2, 3, 3, 4, 5]))
 // console.log("INORDER")
 // test.inOrder(test.root, (node) => console.log(node.data));
@@ -273,6 +295,7 @@ let test = new Tree([1, 2, 2, 3, 3, 4, 5])
 
 // console.log(test.levelOrder(test.root))
 
+console.log(test.height(7))
 console.log(prettyPrint(test.root))
 // console.log(sortArray([1, 7, 4, 23, 8, 4, 3, 5, 7, 9, 67, 6345, 324]))
 
