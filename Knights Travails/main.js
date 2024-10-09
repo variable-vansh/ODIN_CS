@@ -11,4 +11,4 @@ function knightMoves(src, dest) {
 
 }
 
-knightMoves([3, 3], [4, 3])
+knightMoves([2, 5], [5, 2])
